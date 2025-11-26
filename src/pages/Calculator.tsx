@@ -144,7 +144,7 @@ const MiniContractsCalculator = () => {
             </div>
          </div>
 
-         <div className="bg-slate-900 rounded-lg p-4 border border-slate-800 space-y-3">
+         <div className="bg-slate-950 rounded-lg p-4 border border-slate-800 space-y-3">
             <div className="flex justify-between items-center text-sm">
               <span className="text-slate-400">Valor por Ponto (Total):</span>
               <span className="text-white font-mono">

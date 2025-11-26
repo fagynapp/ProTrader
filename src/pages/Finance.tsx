@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Upload, FileText, Download, Calendar, Calculator, TriangleAlert, CircleCheck, CircleX, TrendingDown, Search, Plus, Trash2, Save, ArrowRight, FileSpreadsheet, Bitcoin, Building2, Wallet, RefreshCw, Hash, DollarSign, TrendingUp } from 'lucide-react';
 import { MOCK_BROKERAGE_NOTES, MOCK_TAX_RECORDS } from '../constants';
