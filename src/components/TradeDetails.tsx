@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { 
@@ -444,15 +445,31 @@ const TradeDetails: React.FC<TradeDetailsProps> = ({ trade, onSave }) => {
                            )}
 
                            {field.type === 'checklist' && (
-                             <div className="space-y-1.5">
+                             <div className="space-y-2">
                                {field.options?.map(opt => (
                                  <div key={opt.id} className="flex items-center group/opt gap-2">
                                     {!isEditing ? (
-                                      <button type="button" onClick={() => toggleChecklistOption(section.id, field.id, opt.id)} className={`flex-1 text-left flex items-center gap-3 p-2 rounded-lg border transition-all ${opt.checked ? 'bg-neon-green/10 border-neon-green/30' : 'bg-slate-950 border-slate-800 hover:bg-slate-900'}`}>
-                                        <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors flex-shrink-0 ${opt.checked ? 'bg-neon-green border-neon-green' : 'border-slate-600'}`}>
-                                          {opt.checked && <Check className="w-3 h-3 text-slate-950 stroke-[3]" />}
+                                      <button 
+                                        type="button" 
+                                        onClick={() => toggleChecklistOption(section.id, field.id, opt.id)} 
+                                        className={`flex-1 text-left flex items-center gap-3 p-3 rounded-lg border transition-all duration-200 group/btn ${
+                                          opt.checked 
+                                            ? 'bg-neon-green/10 border-neon-green shadow-[0_0_10px_rgba(16,185,129,0.15)]' 
+                                            : 'bg-slate-950 border-slate-800 hover:bg-slate-900 hover:border-slate-600'
+                                        }`}
+                                      >
+                                        <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all flex-shrink-0 ${
+                                          opt.checked 
+                                            ? 'bg-neon-green border-neon-green scale-110' 
+                                            : 'border-slate-600 group-hover/btn:border-slate-400 bg-slate-900'
+                                        }`}>
+                                          {opt.checked && <Check className="w-3.5 h-3.5 text-slate-950 stroke-[4]" />}
                                         </div>
-                                        <span className={`text-sm ${opt.checked ? 'text-white font-medium' : 'text-slate-400'}`}>{opt.label}</span>
+                                        <span className={`text-sm font-medium transition-colors ${
+                                          opt.checked ? 'text-white' : 'text-slate-400 group-hover/btn:text-slate-200'
+                                        }`}>
+                                          {opt.label}
+                                        </span>
                                       </button>
                                     ) : (
                                       <div className="flex-1 flex items-center gap-2">

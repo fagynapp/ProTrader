@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -198,7 +199,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) => {
            <Filter className="w-3 h-3 text-slate-500 mr-1" />
            {[
              { id: 'ALL', label: 'Tudo' },
-             { id: 'TRADES', label: 'Trades' },
+             { id: 'TRADES', label: 'Diário' },
              { id: 'STRATEGIES', label: 'Estratégias' },
              { id: 'INVESTMENTS', label: 'Carteira' },
              { id: 'NOTES', label: 'Notas' }

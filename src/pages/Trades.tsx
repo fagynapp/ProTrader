@@ -5,7 +5,7 @@ import { MOCK_TRADES, generateDefaultJournal } from '../constants';
 import { Trade, TradeStatus, TradeType, UserAccount } from '../types';
 import TradeDetails from '../components/TradeDetails';
 import UpgradeModal from '../components/UpgradeModal';
-import { ChevronDown, ChevronUp, Pen, Trash2, Copy, Filter, Download, Image as ImageIcon, X, Search, RefreshCw, Lock } from 'lucide-react';
+import { ChevronDown, ChevronUp, Pen, Trash2, Copy, Filter, Download, Image as ImageIcon, X, Search, RefreshCw, Lock, Calendar, Check } from 'lucide-react';
 
 const Trades = () => {
   const [trades, setTrades] = useState<Trade[]>(MOCK_TRADES);
@@ -23,6 +23,10 @@ const Trades = () => {
   const [filterAsset, setFilterAsset] = useState('');
   const [filterType, setFilterType] = useState<'ALL' | TradeType>('ALL');
   const [filterStatus, setFilterStatus] = useState<'ALL' | TradeStatus>('ALL');
+  
+  // Date Filters
+  const [filterStartDate, setFilterStartDate] = useState('');
+  const [filterEndDate, setFilterEndDate] = useState('');
 
   // --- FILTER LOGIC ---
   const filteredTrades = useMemo(() => {
@@ -30,14 +34,27 @@ const Trades = () => {
       const matchAsset = trade.asset.toLowerCase().includes(filterAsset.toLowerCase());
       const matchType = filterType === 'ALL' || trade.type === filterType;
       const matchStatus = filterStatus === 'ALL' || trade.status === filterStatus;
-      return matchAsset && matchType && matchStatus;
+      
+      // Date Range Logic
+      const tradeDate = trade.date; // Format YYYY-MM-DD
+      const matchStart = filterStartDate ? tradeDate >= filterStartDate : true;
+      const matchEnd = filterEndDate ? tradeDate <= filterEndDate : true;
+
+      return matchAsset && matchType && matchStatus && matchStart && matchEnd;
     });
-  }, [trades, filterAsset, filterType, filterStatus]);
+  }, [trades, filterAsset, filterType, filterStatus, filterStartDate, filterEndDate]);
 
   const clearFilters = () => {
     setFilterAsset('');
     setFilterType('ALL');
     setFilterStatus('ALL');
+    setFilterStartDate('');
+    setFilterEndDate('');
+  };
+
+  const clearDateFilter = () => {
+    setFilterStartDate('');
+    setFilterEndDate('');
   };
 
   const handleToggleFilter = () => {
@@ -157,7 +174,7 @@ const Trades = () => {
         {/* Header Actions */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white">Diário de Trades</h1>
+            <h1 className="text-2xl font-bold text-white">Diário de Trading</h1>
             <p className="text-slate-400 text-sm">
               Mostrando {filteredTrades.length} de {trades.length} operações registradas.
             </p>
@@ -166,7 +183,7 @@ const Trades = () => {
             <button 
               onClick={handleToggleFilter}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
-                isFilterOpen || filterAsset || filterType !== 'ALL' || filterStatus !== 'ALL'
+                isFilterOpen || filterAsset || filterType !== 'ALL' || filterStatus !== 'ALL' || filterStartDate
                   ? 'bg-slate-800 text-neon-cyan border-neon-cyan/50' 
                   : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
               }`}
@@ -205,7 +222,7 @@ const Trades = () => {
                  onClick={clearFilters}
                  className="text-xs text-slate-500 hover:text-white flex items-center gap-1 transition-colors"
                >
-                 <RefreshCw className="w-3 h-3" /> Limpar Filtros
+                 <RefreshCw className="w-3 h-3" /> Limpar Todos
                </button>
              </div>
              
@@ -265,6 +282,48 @@ const Trades = () => {
                     <span className={`text-sm font-bold ${filteredTrades.reduce((acc, t) => acc + (t.pnl || 0), 0) >= 0 ? 'text-neon-green' : 'text-neon-rose'}`}>
                       {filteredTrades.reduce((acc, t) => acc + (t.pnl || 0), 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     </span>
+                  </div>
+               </div>
+
+               {/* DATE RANGE FILTER - MINI CALENDAR STYLE */}
+               <div className="col-span-1 md:col-span-4 border-t border-slate-800 pt-4 mt-2">
+                  <div className="flex flex-col md:flex-row gap-4 items-end">
+                      <div className="flex-1 w-full">
+                          <label className="text-xs font-bold text-slate-500 uppercase mb-1 flex items-center gap-1">
+                              <Calendar className="w-3 h-3" /> Data Inicial
+                          </label>
+                          <input 
+                              type="date" 
+                              className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2 px-3 text-sm text-white focus:outline-none focus:border-neon-cyan [color-scheme:dark]"
+                              value={filterStartDate}
+                              onChange={(e) => setFilterStartDate(e.target.value)}
+                          />
+                      </div>
+                      <div className="flex-1 w-full">
+                          <label className="text-xs font-bold text-slate-500 uppercase mb-1 flex items-center gap-1">
+                              <Calendar className="w-3 h-3" /> Data Final
+                          </label>
+                          <input 
+                              type="date" 
+                              className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2 px-3 text-sm text-white focus:outline-none focus:border-neon-cyan [color-scheme:dark]"
+                              value={filterEndDate}
+                              onChange={(e) => setFilterEndDate(e.target.value)}
+                          />
+                      </div>
+                      <div className="flex gap-2">
+                          <button 
+                            onClick={clearDateFilter}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-rose-400 text-xs font-bold rounded-lg border border-slate-700 transition-colors"
+                          >
+                            Limpar Período
+                          </button>
+                          <button 
+                            onClick={() => setIsFilterOpen(false)}
+                            className="px-6 py-2 bg-neon-cyan hover:bg-cyan-600 text-slate-900 text-xs font-bold rounded-lg transition-colors flex items-center gap-2"
+                          >
+                            <Check className="w-3 h-3" /> Aplicar
+                          </button>
+                      </div>
                   </div>
                </div>
              </div>

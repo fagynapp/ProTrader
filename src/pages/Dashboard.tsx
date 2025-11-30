@@ -34,7 +34,7 @@ const Dashboard = () => {
   const CATEGORIES = [
     { id: 'Todos', label: 'Visão Geral', icon: Layers, color: 'text-slate-400' },
     { id: 'Investimentos', label: 'Investimentos', icon: Wallet, color: 'text-purple-400' },
-    { id: 'Trades', label: 'Trades (Geral)', icon: TrendingUp, color: 'text-neon-green' },
+    { id: 'Trades', label: 'Diário de Trading', icon: TrendingUp, color: 'text-neon-green' },
     { id: 'Minicontratos', label: 'Minicontratos', icon: CandlestickChart, color: 'text-yellow-500' },
     { id: 'Ações', label: 'Ações B3', icon: Building2, color: 'text-blue-400' },
     { id: 'Cripto', label: 'Criptomoedas', icon: Bitcoin, color: 'text-orange-500' },
